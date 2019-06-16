@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 作者: @author Harmon <br>
@@ -51,6 +52,8 @@ public class ApiCatalogController extends ApiBaseAction {
         params.put("parent_id", 0);
         //查询列表数据
         List<CategoryVo> data = categoryService.queryList(params);
+        //过滤不生效
+        data = data.stream().filter(t -> t.getIs_show() == 1).collect(Collectors.toList());
         //
         CategoryVo currentCategory = null;
         if (null != id) {
@@ -65,7 +68,10 @@ public class ApiCatalogController extends ApiBaseAction {
         //获取子分类数据
         if (null != currentCategory && null != currentCategory.getId()) {
             params.put("parent_id", currentCategory.getId());
-            currentCategory.setSubCategoryList(categoryService.queryList(params));
+            List<CategoryVo> temp = categoryService.queryList(params);
+            //过滤不生效
+            currentCategory.setSubCategoryList(temp.stream()
+                    .filter(t -> t.getIs_show() == 1).collect(Collectors.toList()));
         }
 
         resultObj.put("categoryList", data);

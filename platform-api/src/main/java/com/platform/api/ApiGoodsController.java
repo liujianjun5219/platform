@@ -199,7 +199,10 @@ public class ApiGoodsController extends ApiBaseAction {
         comment.put("data", commentInfo);
         //当前用户是否收藏
         Map collectParam = new HashMap();
-        collectParam.put("user_id", getUserId());
+        //TODO 测试
+        collectParam.put("user_id", 12345678);
+         userId = 12345678L;
+//        collectParam.put("user_id", getUserId());
         collectParam.put("value_id", id);
         collectParam.put("type_id", 0);
         Integer userHasCollect = collectService.queryTotal(collectParam);
